@@ -12,3 +12,4 @@ Back-end job
 3. understand the usage of datalookupcolumn
 4. customsetting too
 5. understand which part print out front-end
+6. click and new window should be from a father class
