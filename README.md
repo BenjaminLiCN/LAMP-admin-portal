@@ -11,5 +11,6 @@ Back-end job
 2. list basic functions that should be in father class
 3. understand the usage of datalookupcolumn
 4. customsetting too
-5. understand which part print out front-end
-6. click and new window should be from a father class
+5. click and new window should be from a father class
+6. the use of session
+7. encapsulate the functions of database related operations
