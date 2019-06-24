@@ -1,11 +1,13 @@
 <?php
     $classFile =  $_SERVER['PHP_SELF'];
 
-    if ($cmd = $_REQUEST['cmd']) {
-        if (method_exists($page, $_REQUEST['cmd'])) {
-            $page->$cmd();
+    include "commonService.php";
+
+    class labelBrowser extends commonService {
+        public function __construct($classFile) {
+
         }
-        die();
+
     }
 ?>
 <div id='mainLayout' class="easyui-layout" data-options="fit:true">
@@ -32,3 +34,14 @@
         </div>
     </div>
 </div>
+<?php
+    $classFile = $_SERVER['PHP_SELF'];
+    $page = new labelBrowser($classFile);
+    if ($cmd = $_REQUEST['cmd']) {
+        if (method_exists($page, $_REQUEST['cmd'])) {
+            $page->$cmd();
+        }else{
+            die("no such method");
+        }
+        die();
+    }
