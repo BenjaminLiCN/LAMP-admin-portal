@@ -3,7 +3,10 @@
 <?php
 include "header.html";
 include "session.php";
-online_session_start(true);
+
+$username = $_REQUEST['username'];
+
+var_dump($username);
 ?>
 
 <!DOCTYPE html>
@@ -11,7 +14,7 @@ online_session_start(true);
 <head>
     <title>Login Page</title>
 </head>
-<body>
+<body id="loginBody">
 <span id="user" style="display:none"></span>
 <span id="admin" style="display:none">false</span>
 <div class="container">
@@ -23,7 +26,7 @@ online_session_start(true);
                 Welcome Back
             </div>
             <div class="card-body">
-                <form>
+                <form id="loginForm" method="post" onsubmit="doLogin()">
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -40,7 +43,7 @@ online_session_start(true);
                         <input type="checkbox">Remember Me
                     </div>
                     <div class="form-group">
-                        <input type="button" onclick="doLogin()" class="btn float-right login_btn">
+                        <button type="submit" class="btn float-right login_btn">Login</button>
                     </div>
                 </form>
             </div>
