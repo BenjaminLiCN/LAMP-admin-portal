@@ -1,17 +1,15 @@
 <?php
     $classFile =  $_SERVER['PHP_SELF'];
 
-    //die($classFile);
     include "commonService.php";
-    include "header.html";
+
 
     class salesReport extends commonService {
-        public function __construct() {
-            $this->drawMainMenu();
+        public function __construct($classFile=null) {
 
             $this->addToProperty(array(
                 'columnMask' => 'showReport',
-                'codeTitle' => 'Agent',
+                'codeTitle' => 'AGENT',
                 'nameTitle' => 'Agent name',
                 'nameStyle' => 'MIXEDCASE',
                 'comboLookup' => "select AGENT from REPORT"
@@ -19,7 +17,7 @@
 
             $this->addToProperty(array(
                 'columnMask' => 'showReport',
-                'codeTitle' => 'Date',
+                'codeTitle' => 'DATE',
                 'nameTitle' => 'Report date',
                 'nameStyle' => 'MIXEDCASE',
                 'comboLookup' => "select DATE from REPORT)"
@@ -27,7 +25,7 @@
 
             $this->addToProperty(array(
                 'columnMask' => 'showReport',
-                'codeTitle' => 'Content',
+                'codeTitle' => 'CONTENT',
                 'nameTitle' => 'Report content',
                 'nameStyle' => 'MIXEDCASE',
                 'comboLookup' => "select CONTENT from REPORT"
@@ -35,12 +33,32 @@
 
             $this->addToProperty(array(
                 'columnMask' => 'showReport',
-                'codeTitle' => 'Recent',
+                'codeTitle' => 'IS_RECENT',
                 'nameTitle' => 'Is created recently?',
                 'nameStyle' => 'MIXEDCASE',
                 'comboLookup' => "select IS_RECENT from REPORT"
             ));
 
+            $db = $this->openDB();
+            $this->loadData($db);
+
+
+
+
+        }
+
+        function addToProperty($propArray) {
+            array_push($this->gridOpts,$propArray);
+        }
+
+        function loadData($db) {
+            $sql = "select * from REPORT";
+            $result = $this->queryDB($sql,$db);
+            while ($row = mysqli_fetch_assoc($result))
+            {
+                array_push($this->gridData,$row);
+            }
+            $result->close();
         }
 
     }
@@ -48,8 +66,8 @@
 
 
 <?php
-    $classFile = $_SERVER['PHP_SELF'];
     $page = new salesReport($classFile);
+
     if ($cmd = $_REQUEST['cmd']) {
         if (method_exists($page, $_REQUEST['cmd'])) {
             $page->$cmd();
@@ -58,3 +76,6 @@
         }
         die();
     }
+    include "header.html";
+    $page->drawMainFrame();
+
