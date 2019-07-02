@@ -4,10 +4,10 @@ class commonService {
 
     private static $LIVE_HOST = "129.211.79.168";
     private static $DEV_HOST = "127.0.0.1";
-    private static $USERNAME = "root";
+    private static $DB_USER = "root";
     private static $LIVE_PASSWORD = "Aaa951202_";
     private static $DEV_PASSWORD = "951202";
-    private static $DBNAME = "NW_REPORT";
+    private static $DB_NAME = "NW_REPORT";
     var $gridOpts = array();
     var $gridData = array();
 
@@ -21,17 +21,25 @@ class commonService {
         $centerHtml = "";
         $centerHtml = $this->outputGrid($this->gridOpts);
 
-        $frame= "<div class=\"easyui-panel\" title=\"Nested Panel\" style=\"width:100%;height:100%;padding:5px;\">
+        $frame= "<div class=\"easyui-panel\" title=\"Sales Report\" style=\"width:100%;height:100%;padding:5px;\">
         <div class=\"easyui-layout\" data-options=\"fit:true\">
             <div data-options=\"region:'west',split:true\" style=\"width:15%;padding:10px\">
                 <div class=\"easyui-accordion\" data-options=\"fit:true,border:false\">
-                    <div title=\"Title1\" style=\"padding:10px;\">
+                    <div title=\"Basic setting\" style=\"padding:10px;\">
                         content1
                     </div>
-                    <div title=\"Title2\" data-options=\"selected:true\" style=\"padding:10px;\">
-                        content2
+                    <div title=\"Filter\" data-options=\"selected:true\" style=\"padding:10px;\">
+                        <table>
+                            <tr>
+                                <td><select id='recentSelect' class='easyui-combobox' data-options='panelHeight:\"auto\"'>
+                                        <option>Recent records</option>
+                                        <option>Old records</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                    <div title=\"Title3\" style=\"padding:10px\">
+                    <div title=\"Advanced setting\" style=\"padding:10px\">
                         content3
                     </div>
                 </div>
@@ -50,9 +58,54 @@ class commonService {
                     <div style=\"margin-bottom:20px\">
                         <input class=\"easyui-textbox\" id='company' label=\"Organisation:\" labelPosition=\"top\" style=\"width:100%;\">
                     </div>
-                    
+                    <div id='window' class=\"easyui-window\" title=\"Report summary\" data-options=\"iconCls:'icon-save',modal:true,closed:true\" style=\"width:600px;height:350px;padding:5px;\">
+                        <div class=\"easyui-layout\" data-options=\"fit:true\">
+                            <div data-options=\"region:'east',split:true\" style=\"width:250px;padding: 10px;\">
+                                Receiver information:
+                                <table style='border:1px solid #F00'>
+                                    <tr>
+                                        <td>Agent</td>
+                                        <td id='agentCell'></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Date</td>
+                                        <td id='dateCell'></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Content</td>
+                                        <td id='contentCell'></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Recent</td>
+                                        <td id='recentCell'></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div data-options=\"region:'center'\" style=\"padding:10px;\">
+                                Receiver detail:
+                                <table style='border:1px solid #F00'>
+                                    <tr>
+                                        <td>Email</td>
+                                        <td id='emailCell'></td>
+                                    </tr>
+                                    <tr>
+                                        <td>From</td>
+                                        <td id='senderCell'></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Organisation</td>
+                                        <td id='organCell'></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div data-options=\"region:'south',border:false\" style=\"text-align:right;padding:5px 0 0;\">
+                                <a class=\"easyui-linkbutton\" data-options=\"iconCls:'icon-ok'\" href=\"javascript:void(0)\" onclick=\"\" style=\"width:80px\">Ok</a>
+                                <a class=\"easyui-linkbutton\" data-options=\"iconCls:'icon-cancel'\" href=\"javascript:void(0)\" onclick=\"javascript:$('#window').window('close');\" style=\"width:80px\">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
                     <div>
-                        <a href=\"#\" class=\"easyui-linkbutton\" iconCls=\"icon-ok\" style=\"width:100%;height:32px\">Send</a>
+                        <a href=\"#\" class=\"easyui-linkbutton\" iconCls=\"icon-ok\" style=\"width:100%;height:32px\" onclick=\"javascript:generateReport();\">Send</a>
                         <a href=\"#\" class=\"easyui-linkbutton\" iconCls=\"icon-edit\" onclick='sampleFill();' style=\"width:100%;height:32px;margin-top: 5px\">Sample</a>
                     </div>
                 </div>
@@ -106,6 +159,34 @@ class commonService {
             $('#date').textbox('setText','06/07/2019');
             $('#company').textbox('setText','Norwood Industries');
         }
+        
+        function generateReport() {
+            var row = $('#dg').datagrid('getSelected');
+            console.log(row);
+            
+            if(row != null) {
+                var agent = row.AGENT;
+                var date = row.DATE;
+                var content = row.CONTENT;
+                var is_recent = row.IS_RECENT;
+                $('#agentCell').html(agent);
+                $('#dateCell').html(date);
+                $('#contentCell').html(content);
+                $('#recentCell').html(is_recent);
+                
+                $('#emailCell').html(agent);
+                $('#senderCell').html(agent);
+                $('#organCell').html(agent);
+                
+                $('#window').window('open')
+            } else {
+                 $.messager.alert('Info','No record selected!');
+            }
+            
+            
+            
+        }
+        
     </script>
     ";
         print $frame;
@@ -118,7 +199,7 @@ class commonService {
             $columns .= "<th data-options=\"field:'".$v['codeTitle']."'\">".$v['nameTitle']."</th>";
         }
         //".$classFile."?cmd=getGridData
-        $gridFrame = "<table id=\"dg\" title=\"Custom DataGrid Pager\" style=\"width:100%;height:100%\"
+        $gridFrame = "<table id=\"dg\" title=\"Data dynamically loaded from database\" style=\"width:100%;height:100%\"
                        data-options=\"rownumbers:true,singleSelect:true,pagination:true,url:'".$classFile."?cmd=getGridData'
                        \">
                     <thead>
@@ -127,7 +208,15 @@ class commonService {
                 </table>
                 <script type=\"text/javascript\">
                     $(function(){
-                        var pager = $('#dg').datagrid().datagrid('getPager');    // get the pager of datagrid
+                        var dg = $('#dg').datagrid();
+                       
+                        dg.datagrid('loadData',[]);
+                        dg.datagrid({pagePosition:'top'});
+                        dg.datagrid('getPager').pagination({
+                            layout:['list','sep','first','prev','sep',$('#p-style').val(),'sep','next','last','sep','refresh','info']
+                        });
+                        
+                        var pager = dg.datagrid('getPager');    // get the pager of datagrid
                         pager.pagination({
                             buttons:[{
                                 iconCls:'icon-search',
@@ -145,7 +234,7 @@ class commonService {
                                     alert('edit');
                                 }
                             }]
-                        });
+                        }); 
                     });
                     
                 </script>";
@@ -154,9 +243,9 @@ class commonService {
 
     function openDB() {
         $mysql_hostname = self::$DEV_HOST;
-        $mysql_user = self::$USERNAME;
+        $mysql_user = self::$DB_USER;
         $mysql_password = self::$DEV_PASSWORD;
-        $mysql_database = self::$DBNAME;
+        $mysql_database = self::$DB_NAME;
         $db = mysqli_connect($mysql_hostname, $mysql_user, $mysql_password,$mysql_database) or die("Could not connect database");
         return $db;
     }

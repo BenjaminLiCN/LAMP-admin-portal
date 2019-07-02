@@ -1,4 +1,5 @@
 <?php
+    session_start();
     $classFile =  $_SERVER['PHP_SELF'];
 
     include "commonService.php";
@@ -56,16 +57,15 @@
             $result = $this->queryDB($sql,$db);
             while ($row = mysqli_fetch_assoc($result))
             {
+                $row['IS_RECENT'] = $row['IS_RECENT'] == 1 ? "YES" : "NO";
                 array_push($this->gridData,$row);
             }
             $result->close();
         }
 
     }
-?>
 
 
-<?php
     $page = new salesReport($classFile);
 
     if ($cmd = $_REQUEST['cmd']) {
