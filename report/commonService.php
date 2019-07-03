@@ -72,7 +72,7 @@ class commonService {
                             <div class=\"easyui-layout\" data-options=\"fit:true\">
                                 <div data-options=\"region:'east',split:true\" style=\"width:320px;padding: 10px;\">
                                     Debriefing:
-                                    <table style='border:1px solid #F00'>
+                                    <table style='border:1px solid #F00;'>
                                         <tr>
                                             <td>Agent</td>
                                             <td id='agentCell'></td>

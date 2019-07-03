@@ -37,7 +37,7 @@ if(!isset($_SESSION['uid'])){
             $error_msg = 'Sorry, you must enter a valid username and password to log in.';
         }
     }
-}else{//如果用户已经登录，则直接跳转到已经登录页面
+}else{
     $home_url = 'salesReport.php';
     print "<script>
                     location.href = '".$home_url."?PHPSESSIONID=".$sid."';
@@ -69,10 +69,10 @@ if(!isset($_SESSION['uid'])){
                         <fieldset>
                             <label for="username" style="color:white">Username:</label>
                             <!-- Display user name if already entered before -->
-                            <input type="text" id="username" name="username" style="margin-bottom: 10px"
+                            <input type="text" id="username" placeholder="ben" name="username"  style="margin-bottom: 10px"
                                    value="<?php if(!empty($user_username)) echo $user_username; ?>" />
                             <label for="password" style="color:white">Password:</label>
-                            <input style="margin-left:3px" type="password" id="password" name="password"/>
+                            <input style="margin-left:3px" placeholder="951202" type="password" id="password" name="password"/>
 
                         </fieldset>
                         <input type="submit" value="Log In" style="margin-top: 50px" name="submit"/>
