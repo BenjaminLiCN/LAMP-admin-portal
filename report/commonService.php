@@ -163,12 +163,7 @@ class commonService {
         </div>
     </div>
     <script>
-        function sampleFill() {
-            $('#email').textbox('setText','simon.cui@norwood.com.au');
-            $('#name').textbox('setText','Benjamin Li');
-            $('#date').textbox('setText','06/07/2019');
-            $('#company').textbox('setText','Norwood Industries');
-        }
+        
         
         $('#nameFilter').searchbox({
             onChange:function(newValue,oldValue){
@@ -181,12 +176,18 @@ class commonService {
             }
         });
         
-       function filterDataGrid(pattern,type) {
-           $('#dg').datagrid('load',{
+        function sampleFill() {
+            $('#email').textbox('setText','simon.cui@norwood.com.au');
+            $('#name').textbox('setText','Benjamin Li');
+            $('#date').textbox('setText','06/07/2019');
+            $('#company').textbox('setText','Norwood Industries');
+        }
+        function filterDataGrid(pattern,type) {
+            $('#dg').datagrid('load',{
                 pattern: pattern,
                 type: type
-           });
-       }
+            });
+        }
          
         
         function generateReport() {
@@ -293,6 +294,7 @@ class commonService {
         return $db;
     }
 
+    //return false if the query is not successful
     function queryDB($sql,$db) {
         $result = mysqli_query($db,$sql);
         return $result;
