@@ -1,11 +1,10 @@
 <?php
-
+//include "database.php";
 class commonService {
 
     private static $LIVE_HOST = "129.211.79.168";
     private static $DEV_HOST = "127.0.0.1";
     private static $DB_USER = "root";
-    private static $LIVE_PASSWORD = "Aaa951202_";
     private static $DEV_PASSWORD = "951202";
     private static $DB_NAME = "NW_REPORT";
     var $gridOpts = array();
@@ -30,14 +29,24 @@ class commonService {
                     </div>
                     <div title=\"Filter\" data-options=\"selected:true\" style=\"padding:10px;\">
                         <table>
+                            <tr><td>Recent records:</td></tr>
                             <tr>
+                                
                                 <td><select id='recentSelect' class='easyui-combobox' data-options='panelHeight:\"auto\"'>
-                                        <option>Recent records</option>
-                                        <option>Old records</option>
+                                        <option value='all'>All records</option>
+                                        <option value='recent'>Recent records</option>
+                                        <option value='old'>Old records</option>
                                     </select>
                                 </td>
                             </tr>
-                        </table>
+                            <tr><td>Name filtering:</td></tr>
+                            <tr>
+                                
+                                <td><input id='nameFilter' class='easyui-searchbox' data-options=\"prompt:'Enter name'\" style='width:140px;margin-top: 20px'/>
+                                </td>
+                            </tr>
+                        </table>    
+                       
                     </div>
                     <div title=\"Advanced setting\" style=\"padding:10px\">
                         content3
@@ -46,75 +55,77 @@ class commonService {
             </div>
             <div data-options=\"region:'east'\" style=\"width:30%;padding:10px\">
                 <div class=\"easyui-panel\" title=\"Send report\" style=\"width:100%;padding:30px 60px;\">
-                    <div style=\"margin-bottom:20px\">
-                        <input class=\"easyui-textbox\" id='email' label=\"Receiver email:\" labelPosition=\"top\" data-options=\"prompt:'Enter email address...',validType:'email'\" style=\"width:100%;\">
-                    </div>
-                    <div style=\"margin-bottom:20px\">
-                        <input class=\"easyui-textbox\" id='name' label=\"Sender:\" labelPosition=\"top\" data-options=\"prompt:'Sender name...'\" style=\"width:100%;\">
-                    </div>
-                    <div style=\"margin-bottom:20px\">
-                        <input class=\"easyui-datebox\" id='date'  label=\"Schedule date:\" labelPosition=\"top\" data-options=\"prompt:'Choose a date...'\" style=\"width:100%;\">
-                    </div>
-                    <div style=\"margin-bottom:20px\">
-                        <input class=\"easyui-textbox\" id='company' label=\"Organisation:\" labelPosition=\"top\" style=\"width:100%;\">
-                    </div>
-                    <div id='window' class=\"easyui-window\" title=\"Report summary\" data-options=\"iconCls:'icon-save',modal:true,closed:true\" style=\"width:600px;height:350px;padding:5px;\">
-                        <div class=\"easyui-layout\" data-options=\"fit:true\">
-                            <div data-options=\"region:'east',split:true\" style=\"width:250px;padding: 10px;\">
-                                Receiver information:
-                                <table style='border:1px solid #F00'>
-                                    <tr>
-                                        <td>Agent</td>
-                                        <td id='agentCell'></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Date</td>
-                                        <td id='dateCell'></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Content</td>
-                                        <td id='contentCell'></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Recent</td>
-                                        <td id='recentCell'></td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div data-options=\"region:'center'\" style=\"padding:10px;\">
-                                Receiver detail:
-                                <table style='border:1px solid #F00'>
-                                    <tr>
-                                        <td>Email</td>
-                                        <td id='emailCell'></td>
-                                    </tr>
-                                    <tr>
-                                        <td>From</td>
-                                        <td id='senderCell'></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Organisation</td>
-                                        <td id='organCell'></td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div data-options=\"region:'south',border:false\" style=\"text-align:right;padding:5px 0 0;\">
-                                <a class=\"easyui-linkbutton\" data-options=\"iconCls:'icon-ok'\" href=\"javascript:void(0)\" onclick=\"\" style=\"width:80px\">Ok</a>
-                                <a class=\"easyui-linkbutton\" data-options=\"iconCls:'icon-cancel'\" href=\"javascript:void(0)\" onclick=\"javascript:$('#window').window('close');\" style=\"width:80px\">Cancel</a>
+                    <form id='reportForm' class='easyui-form'>
+                        <div style=\"margin-bottom:20px\">
+                            <input class=\"easyui-textbox\" id='email' label=\"Receiver email:\" labelPosition=\"top\" data-options=\"prompt:'Enter email address...',validType:'email',required:true,validateOnCreate:false\" style=\"width:100%;\">
+                        </div>
+                        <div style=\"margin-bottom:20px\">
+                            <input class=\"easyui-textbox\" id='name' label=\"Sender:\" labelPosition=\"top\" data-options=\"prompt:'Sender name...',required:true,validateOnCreate:false\" style=\"width:100%;\">
+                        </div>
+                        <div style=\"margin-bottom:20px\">
+                            <input class=\"easyui-datebox\" id='date'  label=\"Schedule date:\" labelPosition=\"top\" data-options=\"prompt:'Choose a date...',required:true,validateOnCreate:false\" style=\"width:100%;\">
+                        </div>
+                        <div style=\"margin-bottom:20px\">
+                            <input class=\"easyui-textbox\" id='company' label=\"Organisation:\" labelPosition=\"top\" data-options=\"prompt:'Organisation name...',required:true,validateOnCreate:false\" style=\"width:100%;\">
+                        </div>
+                        <div id='window' class=\"easyui-window\" title=\"Report summary\" data-options=\"iconCls:'icon-save',modal:true,closed:true\" style=\"width:600px;height:350px;padding:5px;\">
+                            <div class=\"easyui-layout\" data-options=\"fit:true\">
+                                <div data-options=\"region:'east',split:true\" style=\"width:320px;padding: 10px;\">
+                                    Debriefing:
+                                    <table style='border:1px solid #F00'>
+                                        <tr>
+                                            <td>Agent</td>
+                                            <td id='agentCell'></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Date</td>
+                                            <td id='dateCell'></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Content</td>
+                                            <td id='contentCell'></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Recent</td>
+                                            <td id='recentCell'></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div data-options=\"region:'center'\" style=\"padding:10px;\">
+                                    Receiver detail:
+                                    <table style='border:1px solid #F00'>
+                                        <tr>
+                                            <td></td>
+                                            <td id='emailCell'></td>
+                                        </tr>
+                                        <tr>
+                                            <td>To</td>
+                                            <td id='senderCell'></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td id='organCell'></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div data-options=\"region:'south',border:false\" style=\"text-align:right;padding:5px 0 0;\">
+                                    <a class=\"easyui-linkbutton\" data-options=\"iconCls:'icon-ok'\" href=\"javascript:void(0)\" onclick=\"\" style=\"width:80px\">Ok</a>
+                                    <a class=\"easyui-linkbutton\" data-options=\"iconCls:'icon-cancel'\" href=\"javascript:void(0)\" onclick=\"javascript:$('#window').window('close');\" style=\"width:80px\">Cancel</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <a href=\"#\" class=\"easyui-linkbutton\" iconCls=\"icon-ok\" style=\"width:100%;height:32px\" onclick=\"javascript:generateReport();\">Send</a>
-                        <a href=\"#\" class=\"easyui-linkbutton\" iconCls=\"icon-edit\" onclick='sampleFill();' style=\"width:100%;height:32px;margin-top: 5px\">Sample</a>
-                    </div>
+                        <div>
+                            <a href=\"#\" class=\"easyui-linkbutton\" iconCls=\"icon-ok\" style=\"width:100%;height:32px\" onclick=\"javascript:generateReport();\">Send</a>
+                            <a href=\"#\" class=\"easyui-linkbutton\" iconCls=\"icon-edit\" onclick='sampleFill();' style=\"width:100%;height:32px;margin-top: 5px\">Sample</a>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div data-options=\"region:'center'\" style=\"padding:10px;width:55%\">
                 ".$centerHtml."
             </div>
             <div data-options=\"region:'north'\" style=\"padding:10px\">
-                <a href=\"#\" class=\"easyui-linkbutton\" data-options=\"plain:true\">Home</a>
+                <a href=\"login.php\" class=\"easyui-linkbutton\" data-options=\"plain:true\">Log out (".$_SESSION['username'].")</a>
                 <a href=\"#\" class=\"easyui-menubutton\" data-options=\"menu:'#mm1',iconCls:'icon-edit'\">Edit</a>
                 <a href=\"#\" class=\"easyui-menubutton\" data-options=\"menu:'#mm2',iconCls:'icon-help'\">Help</a>
                 <a href=\"#\" class=\"easyui-menubutton\" data-options=\"menu:'#mm3'\">About</a>
@@ -160,28 +171,61 @@ class commonService {
             $('#company').textbox('setText','Norwood Industries');
         }
         
-        function generateReport() {
-            var row = $('#dg').datagrid('getSelected');
-            console.log(row);
-            
-            if(row != null) {
-                var agent = row.AGENT;
-                var date = row.DATE;
-                var content = row.CONTENT;
-                var is_recent = row.IS_RECENT;
-                $('#agentCell').html(agent);
-                $('#dateCell').html(date);
-                $('#contentCell').html(content);
-                $('#recentCell').html(is_recent);
-                
-                $('#emailCell').html(agent);
-                $('#senderCell').html(agent);
-                $('#organCell').html(agent);
-                
-                $('#window').window('open')
-            } else {
-                 $.messager.alert('Info','No record selected!');
+        $('#nameFilter').searchbox({
+            onChange:function(newValue,oldValue){
+                filterDataGrid(newValue,'name');
+            } 
+        });
+        $('#recentSelect').combobox({
+            onChange:function(newValue,oldValue){
+                filterDataGrid(newValue,'recent');
             }
+        });
+        
+       function filterDataGrid(pattern,type) {
+           $('#dg').datagrid('load',{
+                pattern: pattern,
+                type: type
+           });
+       }
+         
+        
+        function generateReport() {
+           $('#reportForm').form('submit',{
+				onSubmit:function(){
+					$(this).form('enableValidation').form('validate');
+					var isValid = $(this).form('validate');
+					console.log(isValid);
+					return isValid;
+				},
+				success:function(){	
+				    var row = $('#dg').datagrid('getSelected');
+                    console.log(row);
+                    
+                    if(row != null) {
+                        var agent = row.AGENT;
+                        var date = row.DATE;
+                        var content = row.CONTENT;
+                        var is_recent = row.IS_RECENT;
+                        $('#agentCell').html(agent);
+                        $('#dateCell').html(date);
+                        $('#contentCell').html(content);
+                        $('#recentCell').html(is_recent);
+                        
+                        var sender = $('#name').textbox('getText');
+                        var email = $('#email').textbox('getText');
+                        var company = $('#company').textbox('getText');
+                        $('#emailCell').html(sender);
+                        $('#senderCell').html(email);
+                        $('#organCell').html(company);
+                        
+                        $('#window').window('open')
+                    } else {
+                         $.messager.alert('Info','No record selected!');
+                    }
+				}
+			});
+            
             
             
             
@@ -256,6 +300,49 @@ class commonService {
     }
 
     function getGridData() {
-        echo json_encode($this->gridData);
+        $pattern = $_REQUEST['pattern'];
+        $type = $_REQUEST['type'];
+        if($pattern==null) {
+            echo json_encode($this->gridData);
+            die();
+        }
+        $rawData = $this->gridData;
+        if(strcmp($type,'name')==0) {
+            foreach ($rawData as $k => $v) {
+                $pos = stristr($v['AGENT'],$pattern);
+                if ($pos !== false) {
+                    //echo "contains the pattern"."\n";
+                } else {
+                    //echo "unset array, key = ".$k."\n";
+                    unset($rawData[$k]);
+                }
+            }
+            echo json_encode(array_values($rawData));
+        } else {
+            switch ($pattern) {
+                case 'all':
+                    echo json_encode($this->gridData);
+                    break;
+                case 'recent':
+                    foreach ($rawData as $k => $v) {
+                        if (strcmp($v['IS_RECENT'],'NO'))
+                            unset($rawData[$k]);
+                    }
+                    echo json_encode(array_values($rawData));
+                    break;
+                case 'old':
+                    foreach ($rawData as $k => $v) {
+                        if (strcmp($v['IS_RECENT'],'YES'))
+                            unset($rawData[$k]);
+                    }
+                    echo json_encode(array_values($rawData));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+
     }
 }

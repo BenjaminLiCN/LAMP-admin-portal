@@ -1,15 +1,15 @@
 <?php
-ob_start();
-session_start();
+@session_start();
 include "header.html";
 include "database.php";
 
 $username = $_REQUEST['username'];
 
 
-//TODO: trim the code and connect to database
 $error_msg = "";
 //if $_SESSION['uid'] is invalid, do the following
+$sid = @session_id();
+
 if(!isset($_SESSION['uid'])){
     if(isset($_POST['submit'])){//user posted a request
         $dbc = mysqli_connect(DEV_HOST,DB_USER,DEV_PASSWORD,DB_NAME);
@@ -19,15 +19,17 @@ if(!isset($_SESSION['uid'])){
         if(!empty($user_username)&&!empty($user_password)){
             //one-way encryption
             //PASSWORD = SHA('".$user_password."')
-            $query = "select UID,USERNAME from USER where USERNAME = '".$user_username."' and "."PASSWORD = SHA('".$user_password."')";
-            $data = mysqli_query($dbc,$query);
+            $sql = "select UID,USERNAME from USER where USERNAME = '".$user_username."' and "."PASSWORD = SHA('".$user_password."')";
+            $data = mysqli_query($dbc,$sql);
             //there's exactly one row matches
             if(mysqli_num_rows($data)==1){
                 $row = mysqli_fetch_array($data);
-                $_SESSION['uid']=$row['uid'];
-                $_SESSION['username']=$row['username'];
+                $_SESSION['uid']=$row['UID'];
+                $_SESSION['username']=$row['USERNAME'];
                 $home_url = 'salesReport.php';
-                header('Location: '.$home_url);
+                print "<script>
+                    location.href = '".$home_url."?PHPSESSIONID=".$sid."&uid=".$_SESSION['uid']."';
+                </script>";
             }else{//wrong password
                 $error_msg = 'Sorry, you must enter a valid username and password to log in.';
             }
@@ -37,7 +39,9 @@ if(!isset($_SESSION['uid'])){
     }
 }else{//如果用户已经登录，则直接跳转到已经登录页面
     $home_url = 'salesReport.php';
-    header('Location: '.$home_url);
+    print "<script>
+                    location.href = '".$home_url."?PHPSESSIONID=".$sid."';
+                </script>";
 }
 ?>
 
@@ -54,7 +58,7 @@ if(!isset($_SESSION['uid'])){
         <div data-role="popup" id="loginPopup" data-overlay-theme="b" data-theme="b" data-dismissible="false" data-position-to="window">
         <div class="card">
             <div class="card-header">
-                Welcome Back
+                <a href="#" title="Username:ben, password:951202." style="color:white;text-decoration:none" class="easyui-tooltip">Password show</a>
             </div>
             <div class="card-body" style="margin-top: 20px">
                 <?php

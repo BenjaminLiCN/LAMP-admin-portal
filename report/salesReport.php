@@ -1,6 +1,10 @@
 <?php
-    session_start();
+    @session_id($_GET['PHPSESSIONID']);
+
+    @session_start();
     $classFile =  $_SERVER['PHP_SELF'];
+    $sid = @session_id();
+
 
     include "commonService.php";
 
@@ -79,3 +83,12 @@
     include "header.html";
     $page->drawMainFrame();
 
+
+    if(isset($_SESSION['uid'])){
+    //        echo 'You are Logged as '.$_SESSION['username'].'<br/>';
+    //        echo '<a href="login.php"> Log Out('.$_SESSION['username'].')</a>';
+    } else {
+        $home_url = 'login.php';
+        header('Location: '.$home_url);
+
+    }
