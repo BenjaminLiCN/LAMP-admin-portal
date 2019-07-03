@@ -1,10 +1,21 @@
 # Admin-portal
-A demonstration of mastered tools and technologies.
+Please visit http://129.211.79.168/admin-portal/report/login.php to find more!  
+=============
+This is a personal interest website.  
+If you have any advice, please contact me: jili@student.unimelb.edu.au
 
-1. setup the cmd parsing function
-2. list basic functions that should be in father class
-3. understand the usage of datalookupcolumn
-4. customsetting too
-5. click and new window should be from a father class
-6. the use of session
-7. encapsulate the functions of database related operations
+
+## TODO LIST  
++ ~user login~
++ ~session check~
++ ~dynamically load data from database~
++ ~data filtering~
++ ~front-end validation~
++ ~modal window pop up~
++ ~encrypt password~
++ email function
++ refine code, make it more Object-oriented
++ register
++ more complex easyui accordian
++ ...
+
