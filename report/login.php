@@ -1,7 +1,7 @@
 <?php
 @session_start();
 include "header.html";
-include "database.php";
+include "commonService.php";
 
 $username = $_REQUEST['username'];
 
@@ -10,9 +10,11 @@ $error_msg = "";
 //if $_SESSION['uid'] is invalid, do the following
 $sid = @session_id();
 
+$service = new commonService();
+
 if(!isset($_SESSION['uid'])){
     if(isset($_POST['submit'])){//user posted a request
-        $dbc = mysqli_connect(DEV_HOST,DB_USER,DEV_PASSWORD,DB_NAME);
+        $dbc = mysqli_connect($service->DEV_HOST,$service->DB_USER,$service->DEV_PASSWORD,$service->DB_NAME);
         $user_username = mysqli_real_escape_string($dbc,trim($_POST['username']));
         $user_password = mysqli_real_escape_string($dbc,trim($_POST['password']));
 
@@ -20,7 +22,7 @@ if(!isset($_SESSION['uid'])){
             //one-way encryption
             //PASSWORD = SHA('".$user_password."')
             $sql = "select UID,USERNAME from USER where USERNAME = '".$user_username."' and "."PASSWORD = SHA('".$user_password."')";
-            $data = mysqli_query($dbc,$sql);
+            $data = $service->queryDB($dbc,$sql);
             //there's exactly one row matches
             if(mysqli_num_rows($data)==1){
                 $row = mysqli_fetch_array($data);
@@ -92,7 +94,6 @@ if(!isset($_SESSION['uid'])){
         </div>
     </div>
 </div>
-<input id="PHPSESSID" name="PHPSESSID" type="hidden" value="<?php print session_id(); ?>">
 </body>
 
 </html>

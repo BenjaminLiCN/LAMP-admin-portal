@@ -1,12 +1,11 @@
 <?php
-//include "database.php";
 class commonService {
 
-    private static $LIVE_HOST = "129.211.79.168";
-    private static $DEV_HOST = "127.0.0.1";
-    private static $DB_USER = "root";
-    private static $DEV_PASSWORD = "951202";
-    private static $DB_NAME = "NW_REPORT";
+    public $LIVE_HOST = "129.211.79.168";
+    public $DEV_HOST = "127.0.0.1";
+    public $DB_USER = "root";
+    public $DEV_PASSWORD = "951202";
+    public $DB_NAME = "NW_REPORT";
     var $gridOpts = array();
     var $gridData = array();
 
