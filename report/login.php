@@ -23,7 +23,7 @@ if(!isset($_SESSION['uid'])){
             //one-way encryption
             //PASSWORD = SHA('".$user_password."')
             $sql = "select UID,USERNAME from USER where USERNAME = '".$user_username."' and "."PASSWORD = SHA('".$user_password."')";
-
+            var_dump($sql);
             $data = $service->queryDB($dbc,$sql);
             while ($row = mysqli_fetch_assoc($data)){
                 var_dump($row);
