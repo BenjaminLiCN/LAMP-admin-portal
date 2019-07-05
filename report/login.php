@@ -4,7 +4,6 @@ ini_set('display_errors',1);
 include "header.html";
 include "commonService.class.php";
 
-$username = $_REQUEST['username'];
 
 
 $error_msg = "";
