@@ -17,21 +17,14 @@ if(!isset($_SESSION['uid'])){
         $dbc = mysqli_connect($service->DEV_HOST,$service->DB_USER,$service->DEV_PASSWORD,$service->DB_NAME);
         $user_username = mysqli_real_escape_string($dbc,trim($_POST['username']));
         $user_password = mysqli_real_escape_string($dbc,trim($_POST['password']));
-        var_dump("1");
         if(!empty($user_username)&&!empty($user_password)){
-            var_dump("2");
             //one-way encryption
             //PASSWORD = SHA('".$user_password."')
             $sql = "select UID,USERNAME from USER where USERNAME = '".$user_username."' and "."PASSWORD = SHA('".$user_password."');";
-            var_dump($sql);
-            $data = $service->queryDB($dbc,$sql);
-            while ($row = mysqli_fetch_assoc($data)){
-                var_dump($row);
-                var_dump("loop");
-            }
+            $db = $service->openDB();
+            $data = $service->queryDB($db,$sql);
+
             //there's exactly one row matches
-            var_dump(mysqli_num_rows($data));
-            var_dump(mysqli_num_rows($data));
             if(mysqli_num_rows($data)==1){
                 $row = mysqli_fetch_array($data);
                 $_SESSION['uid']=$row['UID'];
@@ -41,7 +34,6 @@ if(!isset($_SESSION['uid'])){
                     location.href = '".$home_url."?PHPSESSIONID=".$sid."&uid=".$_SESSION['uid']."';
                 </script>";
             }else{//wrong password
-                var_dump("3");
                 $error_msg = 'Sorry, you must enter a valid username and password to log in.';
             }
         }else{
