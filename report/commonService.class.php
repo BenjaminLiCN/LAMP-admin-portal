@@ -286,10 +286,10 @@ class commonService {
     }
 
     function openDB() {
-        $mysql_hostname = self::$DEV_HOST;
-        $mysql_user = self::$DB_USER;
-        $mysql_password = self::$DEV_PASSWORD;
-        $mysql_database = self::$DB_NAME;
+        $mysql_hostname = $this->DEV_HOST;
+        $mysql_user = $this->DB_USER;
+        $mysql_password = $this->DEV_PASSWORD;
+        $mysql_database = $this->DB_NAME;
         $db = mysqli_connect($mysql_hostname, $mysql_user, $mysql_password,$mysql_database) or die("Could not connect database");
         return $db;
     }
