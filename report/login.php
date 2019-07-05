@@ -27,8 +27,10 @@ if(!isset($_SESSION['uid'])){
             $data = $service->queryDB($dbc,$sql);
             while ($row = mysqli_fetch_assoc($data)){
                 var_dump($row);
+                var_dump("loop");
             }
             //there's exactly one row matches
+            var_dump(mysqli_num_rows($data));
             var_dump(mysqli_num_rows($data));
             if(mysqli_num_rows($data)==1){
                 $row = mysqli_fetch_array($data);
