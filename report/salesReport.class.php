@@ -58,7 +58,7 @@
 
         function loadData($db) {
             $sql = "select * from REPORT";
-            $result = $this->queryDB($sql,$db);
+            $result = $this->queryDB($db,$sql);
             while ($row = mysqli_fetch_assoc($result))
             {
                 $row['IS_RECENT'] = $row['IS_RECENT'] == 1 ? "YES" : "NO";
