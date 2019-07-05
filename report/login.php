@@ -29,7 +29,7 @@ if(!isset($_SESSION['uid'])){
                 var_dump($row);
             }
             //there's exactly one row matches
-            var_dump($data);
+            var_dump(mysqli_num_rows($data));
             if(mysqli_num_rows($data)==1){
                 $row = mysqli_fetch_array($data);
                 $_SESSION['uid']=$row['UID'];
