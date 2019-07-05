@@ -295,7 +295,7 @@ class commonService {
     }
 
     //return false if the query is not successful
-    function queryDB($sql,$db) {
+    function queryDB($db,$sql) {
         $result = mysqli_query($db,$sql);
         return $result;
     }
