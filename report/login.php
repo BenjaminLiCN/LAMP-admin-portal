@@ -17,8 +17,9 @@ if(!isset($_SESSION['uid'])){
         $dbc = mysqli_connect($service->DEV_HOST,$service->DB_USER,$service->DEV_PASSWORD,$service->DB_NAME);
         $user_username = mysqli_real_escape_string($dbc,trim($_POST['username']));
         $user_password = mysqli_real_escape_string($dbc,trim($_POST['password']));
-
+        var_dump("1");
         if(!empty($user_username)&&!empty($user_password)){
+            var_dump("2");
             //one-way encryption
             //PASSWORD = SHA('".$user_password."')
             $sql = "select UID,USERNAME from USER where USERNAME = '".$user_username."' and "."PASSWORD = SHA('".$user_password."')";
@@ -34,9 +35,11 @@ if(!isset($_SESSION['uid'])){
                     location.href = '".$home_url."?PHPSESSIONID=".$sid."&uid=".$_SESSION['uid']."';
                 </script>";
             }else{//wrong password
+                var_dump("3");
                 $error_msg = 'Sorry, you must enter a valid username and password to log in.';
             }
         }else{
+            var_dump("4");
             $error_msg = 'Sorry, you must enter a valid username and password to log in.';
         }
     }
