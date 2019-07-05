@@ -6,7 +6,7 @@
     $sid = @session_id();
 
 
-    include "commonService.php";
+    include "commonService.class.php";
 
 
     class salesReport extends commonService {

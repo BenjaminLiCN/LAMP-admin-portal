@@ -31,10 +31,10 @@ class commonService {
                             <tr><td>Recent records:</td></tr>
                             <tr>
                                 
-                                <td><select id='recentSelect' class='easyui-combobox' data-options='panelHeight:\"auto\"'>
+                                <td><select id='recentSelect' class='easyui-combobox'  data-options='panelHeight:\"auto\",width:150'>
                                         <option value='all'>All records</option>
-                                        <option value='recent'>Recent records</option>
-                                        <option value='old'>Old records</option>
+                                        <option value='recent'>Old records</option>
+                                        <option value='old'>Recent records</option>
                                     </select>
                                 </td>
                             </tr>
@@ -307,6 +307,8 @@ class commonService {
             echo json_encode($this->gridData);
             die();
         }
+        //Php will allocate new memory for the new array by default
+        // $a = &$b; is the way to create reference of the old array
         $rawData = $this->gridData;
         if(strcmp($type,'name')==0) {
             foreach ($rawData as $k => $v) {
