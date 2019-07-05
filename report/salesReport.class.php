@@ -1,7 +1,7 @@
 <?php
     @session_id($_GET['PHPSESSIONID']);
-
     @session_start();
+    ini_set('display_errors',1);
     $classFile =  $_SERVER['PHP_SELF'];
     $sid = @session_id();
 
